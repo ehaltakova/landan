@@ -1,4 +1,4 @@
-package com.nemetschek.innovation.util;
+package bg.nemetschek.landan.ui.util;
 
 import org.apache.commons.codec.binary.Base64;
 

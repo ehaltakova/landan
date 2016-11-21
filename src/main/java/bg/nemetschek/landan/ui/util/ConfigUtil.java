@@ -1,4 +1,4 @@
-package com.nemetschek.innovation.util;
+package bg.nemetschek.landan.ui.util;
 
 /**
  * Application Configuration.

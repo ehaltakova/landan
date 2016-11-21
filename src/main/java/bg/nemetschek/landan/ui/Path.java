@@ -1,4 +1,4 @@
-package com.nemetschek.innovation;
+package bg.nemetschek.landan.ui;
 
 /**
  * Application routes and API end points.

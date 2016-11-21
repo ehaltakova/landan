@@ -2,12 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.example.spark</groupId>
-	<artifactId>spark-test</artifactId>
+	<artifactId>landan-ui</artifactId>
 	<version>1.0</version>
 	<name>test-spark-project</name>
 	<packaging>war</packaging>
 
-	
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>

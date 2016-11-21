@@ -1,7 +1,6 @@
-package com.nemetschek.innovation;
+package bg.nemetschek.landan.ui;
 
-import com.nemetschek.innovation.util.JsonUtil;
-
+import bg.nemetschek.landan.ui.util.JsonUtil;
 import spark.ExceptionHandler;
 
 /**
