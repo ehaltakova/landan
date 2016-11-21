@@ -1,0 +1,71 @@
+body {
+	background-color: black !important;
+}
+
+#board {
+	font-size: 15px;
+	color: white;
+	margin:5px;
+}
+#radar {
+	width: 650px;
+	height: 650px;
+	margin-top: 10px;
+	margin-left: 10px;
+	background-image: url('../images/radar.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+#radar-red {
+	margin-bottom: 15px;
+	background-image: url('../images/radar_red.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+
+#showCreateDialog {
+	width:100%;
+}
+
+.plane {
+	cursor: pointer;
+	// url(../images/hand.png), pointer; 	
+}
+
+.plane-details {
+	margin-bottom:10px;
+}
+
+.property-name {
+	margin-right:15px;
+}
+
+.property-value {
+	float:right;
+}
+
+.land {
+	width: 100%;
+    height: 32px;
+    font-weight: bold;
+    margin-top:5px;
+}
+
+#cancel {
+	width: 13px;
+}
+
+.cancel-img {
+	float:right;
+}
+
+#rad{
+  position:absolute;
+  width:651px;
+  height:651px; 
+  background:url(http://i.stack.imgur.com/fbgUD.png);
+  background-size: cover;
+  background-position:center;
+}

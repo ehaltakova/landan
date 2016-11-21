@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title data-localize>Planes</title>
+	<link href="css/custom.css" rel="stylesheet">
+	<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<script src="lib/jquery/jquery.min.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="javascript/plane.js"></script>
+  </head>
+  <body>
+
+	 <div id="radar">
+	 	<div id="rad">
+	 	</div>
+	 </div>
+	  <div id="board">
+	 	<b>Nemetschek ATC Board:</b> https://experts.nemetschek.bg/test-jira/secure/RapidBoard.jspa?rapidView=115
+	 </div>
+	
+	<script>
+		var atc = new $.ATC();
+	</script>
+
+</body>
+</html>

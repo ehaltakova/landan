@@ -1,0 +1,7 @@
+#macro(footer)
+<footer class="footer">
+	<div class="container">
+    	<div id="copyright" data-localize>©2016 Bosch Automotive Service Solutions</div>
+    </div>
+</footer>
+#end

@@ -1,0 +1,8 @@
+#radar {
+	width: 1300px;
+	height: 800px;
+	margin-top: 10px;
+	margin-left: 30px;
+	background-image: url('../images/radar.jpg');
+	background-repeat: no-repeat;
+}

@@ -1,0 +1,12 @@
+#macro(notificationsArea)
+<div class="container">
+	<div id="notificationsArea">
+		#if($msg != "")
+        	<div class="alert alert-danger alert-dismissable">
+        		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+        		<div>$msg</div>
+        	</div>
+    	#end
+	</div>
+</div>
+#end

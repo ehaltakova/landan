@@ -1,0 +1,82 @@
+#parse("/velocity/navbar.vm")
+#parse("/velocity/footer.vm")
+#parse("/velocity/notificationsArea.vm")
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">	
+	<title data-localize>Login</title>
+	<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/custom.css" rel="stylesheet">
+  </head>
+  <body>
+	
+	<!-- Header Navbar -->
+	#@navbar()
+	#end
+	
+	<!-- User Notifications Area -->
+	#@notificationsArea()
+	#end    
+    
+    <!-- Login Form -->
+    <div class="container">
+      <form method="post" class="form-signin" id="loginForm" enctype="application/x-www-form-urlencoded">
+        <h3 class="form-signin-heading" data-localize>Please sign in</h3>
+        <input type="text" id="username" class="form-control" placeholder="Username (Bosch Active Directory ID)" name = "username">
+        <input type="password" id="pass" class="form-control" placeholder="Password" name="password">
+        <div class="checkbox">
+        </div>
+        <button type="submit" class="btn btn-lg btn-primary btn-block" id="loginBtn" data-localize>Login</button>
+      </form>
+	</div>
+	
+	<!-- Footer -->
+	#@footer()
+	#end
+	
+  </body>
+</html>
+
+#[[
+	<script src="config/config.js"></script>
+	<script src="lib/jquery/jquery.min.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="lib/jquery-placeholders/jquery.placeholder.min.js"></script>
+	<script src="javascript/helper.js"></script>
+	<script src="javascript/layoutHelper.js"></script>
+	
+	<script>
+		$( document ).ready(function() {	
+			
+			// placeholders localization
+			$("#username").attr("placeholder", localize("Username (Bosch Active Directory ID)"));
+			$("#pass").attr("placeholder", localize("Password"));
+			
+			// show placehodlers in IE9
+			$(function() {
+				$('input, text').placeholder();
+			});
+	
+			// validate and submit login form 
+			$("#loginBtn").on('click', function(e) {	
+				e.preventDefault();
+				var errorMsgs = [];
+				if($("#username").val().length === 0) {
+					errorMsgs.push(localize('Username is required.') + '\n');
+				}
+				if($("#pass").val().length === 0) {
+					errorMsgs.push(localize('Password is required.') + '\n');
+				}
+				if(errorMsgs.length > 0) {
+					displayUserNotification('warning', errorMsgs);
+					e.preventDefault();
+					return;
+				}
+				$("#loginForm").submit();
+			});	
+		});
+	</script>
+]]#

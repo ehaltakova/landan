@@ -1,0 +1,47 @@
+#macro(navbar)
+#set ($homeURL = $contextPath + $WebPath.getIndex())
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header pull-left">
+			#if($authenticated)
+				<button type="button" class="navbar-toggle pull-left" data-toggle="collapse" data-target="#salssaNavbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+				</button>
+			#end
+			<a class="navbar-brand" href="$homeURL">SALSSA2</a> 
+		</div> 
+		<div class="navbar-header pull-right">
+			<ul class="nav navbar-nav">
+				<li>
+					<a href="$homeURL" style="margin:0px 0px 0px 20px;padding:0px;">
+						<img style="height:50px;" src="images/bosch-logo.jpg">
+					</a>
+				</li> 			
+			</ul>
+		</div>
+		#if($authenticated)
+			#set ($userPageUrl = $contextPath + $WebPath.getUser() + $userContext.getUser().getUsername())
+			#set ($logoutURL = $contextPath + $WebPath.getLogout())
+			#set ($userMngURL = $contextPath + $WebPath.getUsers())
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a id="homePageRef" href="$homeURL">Home<span class="sr-only">(current)</span></a></li>
+					 #foreach($key in $links.keySet())
+			            <li><a href="$links.get($key)">$key</a></li>
+			        #end
+			        #if($userContext.getUser().isAdmin())
+			       		<li><a href="$userMngURL">User Management</a></li>
+			        #end
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="$userPageUrl">$userContext.getUser().getFirstName() $userContext.getUser().getLastName()</a></li>
+					<li><a href="$logoutURL">Logout</a></li>
+				</ul>
+			</div>
+		#end
+	</div>
+</nav>
+#end
