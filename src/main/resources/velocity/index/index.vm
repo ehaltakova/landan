@@ -20,6 +20,12 @@
 	 	<b>Nemetschek ATC Board:</b> https://experts.nemetschek.bg/test-jira/secure/RapidBoard.jspa?rapidView=115
 	 </div>
 	
+	<select id="gate" style="display:none">
+		#foreach($gate in $gates)
+			<option data-coordinates="$gate.getCoordinates()" value="$gate.getName()">$gate.getName()</option>
+  		#end
+	</select>
+	
 	<script>
 		var atc = new $.ATC();
 	</script>

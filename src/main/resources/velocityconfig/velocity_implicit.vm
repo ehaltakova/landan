@@ -1,10 +1,6 @@
 #* @implicitly included *#
-#* @vtlvariable name="WebPath" type="com.example.spark.app.Path" *#
+#* @vtlvariable name="gates" type="Java.util.List" *#
 #* @vtlvariable name="msg" type="Java.lang.String" *#
-#* @vtlvariable name="authenticated" type="Java.lang.Boolean" *#
-#* @vtlvariable name="userContext" type="com.example.spark.auth.UserContext" *#
-#* @vtlvariable name="links" type="Java.util.Map" *#
-#* @vtlvariable name="contextPath" type="Java.lang.String" *#
 
 
 

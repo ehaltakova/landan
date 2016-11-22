@@ -1,3 +1,4 @@
+var gates = {};
 (function ($) { 
 	
 	/**
@@ -35,27 +36,22 @@
     		
     		// TODO: call get planes WS directly from JIRA
     		$.ajax({
-    			type: "POST",
+    			type: "GET",
     			contentType: "application/json; charset=utf-8",
-    			url: "http://192.168.180.41:6789/innovasion/api/planes",     
+    			url: "http://localhost:8888/api/planes",     
     			async: true,
     			data: '',
     			success: function(resp) {
-    				console.log(resp);
-        			for(var i=0; i<resp.issues.length; i++) {
-        				var issue = resp.issues[i];
-        				var fields = issue.fields;
-        				var name = fields.summary;
-        				var gate = getGate(fields.customfield_13403.value);
-        				var gateStr = fields.customfield_13403.value;
-        				var type = fields.issuetype.name;
-        				var position = fields.customfield_13401;
-        				var status = fields.status.name
-        				var destination = fields.customfield_13400.value;
-        				var heading = fields.customfield_13402;
-        				var lastUpdated = fields.updated;
-        				var priority = fields.priority.name;
-        				var plane = new $.Plane(issue.id, issue.key, name, type, priority, gate, gateStr, position, status, destination, heading, lastUpdated);
+        			for(var i=0; i<resp.length; i++) {
+        				var issue = resp[i];
+        				var name = issue.name;
+        				var type = issue.type;
+        				var position = issue.position;
+        				var status = issue.status.name
+        				var destination = issue.destination;
+        				var heading = issue.heading;
+        				var priority = issue.priority;
+        				var plane = new $.Plane(issue.id, issue.key, name, type, priority, position, status, destination, heading);
         				self.planes[name] = plane;
         			}
         			self.drawPlanes();
@@ -113,15 +109,17 @@
 						    				  '<tr><td><span class="property-name label label-default">Heading:</span></td><td><span class="property-value">  ' + plane.heading + '</span></td></tr>' +
 						    				  '<tr><td><span class="property-name label label-default">Destination:</span></td><td><span class="property-value">  ' + plane.destination + '</span></td></tr>' + 
 						    				'</tbody></table>';
-								html += 	'<div>Gate:<select id="gate"><option value="A1" selected>A1</option><option value="B1">B1</option><option value="B2">B2</option><option value="B3">B3</option></select></div>';
+								html += 	'<div>Gate:<select id="gate' + plane.name + '">' + $("#gate").html() + '</select>';
 								html += 	'<button id="land' + plane.name + '" class="land btn btn-info">Land</button>';
 								return html;
 						    },
 			    			'container':"body"
 			    		}).on('show.bs.popover', function(currentPlaneElement, currentPlane) { 
 			        		$('body').off().on('click', '.land', function() { 
-			        			var selectedGate = $("#gate").val();
-		        				self.land(currentPlaneElement, currentPlane, selectedGate);
+			        			var selectedGate = $("#gate" + currentPlane.name).val();
+			        			var coordinates = $("#gate" + currentPlane.name).find(":selected").data("coordinates");
+			        			var gate = {'name':selectedGate, "left":parseInt(coordinates.split("x")[0]), "top":parseInt(coordinates.split("x")[1])};
+		        				self.land(currentPlaneElement, currentPlane, gate);
 			        			$(currentPlaneElement).popover('destroy');
 			        			$(".popover").popover().hide();
 			         		});
@@ -134,7 +132,7 @@
 					});
 				} else if(plane.status == "Landing") {
 					self.stopUpdatingRadarScreen();
-					self.land(planeElement, plane, plane.gateStr);
+					self.land(planeElement, plane, plane.gate.name);
 				} else if(plane.status == "Landed") {
 					
 				}
@@ -148,34 +146,29 @@
     		var newPlanes = [];
     		// TODO: call get planes WS directly from JIRA
     		$.ajax({
-    			type: "POST",
+    			type: "GET",
     			contentType: "application/json; charset=utf-8",
-    			url: "http://192.168.180.41:6789/innovasion/api/planes",     
+    			url: "http://localhost:8888/api/planes",     
     			async: true,
     			data: '',
     			success: function(resp) {
-    				console.log(resp);
-        			for(var i=0; i<resp.issues.length; i++) {
-        				var issue = resp.issues[i];
-        				var fields = issue.fields;
-        				var name = fields.summary;
-        				var gate = getGate(fields.customfield_13403.value);
-        				var gateStr = fields.customfield_13403.value;
-        				var type = fields.issuetype.name;
-        				var position = fields.customfield_13401;
-        				var status = fields.status.name
-        				var destination = fields.customfield_13400.value;
-        				var heading = fields.customfield_13402;
-        				var lastUpdated = fields.updated;
-        				var priority = fields.priority.name;
-        				var plane = new $.Plane(issue.id, issue.key, name, type, priority, gate, gateStr, position, status, destination, heading, lastUpdated);
+        			for(var i=0; i<resp.length; i++) {
+        				var issue = resp[i];
+        				var name = issue.name;
+        				var type = issue.type;
+        				var position = issue.position;
+        				var status = issue.status.name
+        				var destination = issue.destination;
+        				var heading = issue.heading;
+        				var priority = issue.priority;
+        				var plane = new $.Plane(issue.id, issue.key, name, type, priority, position, status, destination, heading);
         				if(self.planes[name] == null) {
         					newPlanes.push(plane);
         				} else {
         					// take care for Landing and Landed for the updated
         					if(plane.status == "Landing") {
             					self.stopUpdatingRadarScreen();
-            					self.land($(".plane[data-name='" + plane.name +"']"), plane, plane.gateStr);
+            					self.land($(".plane[data-name='" + plane.name +"']"), plane, plane.gate.name);
             				} else if(plane.status == "Landed") {
             					
             				}
@@ -207,10 +200,7 @@
         					
         					// attach popover
         					var planeImg = $(".plane[data-name='" + newPlane.name +"']");
-        					console.log("aaaaaaaaaaaaaa");
-        					console.log(planeImg);
         					$(".plane[data-name='" + newPlane.name +"']").click(function(e) {
-        						console.log("Click!");
         						self.stopUpdatingRadarScreen();
         						$(this).popover({ 
         			    			'title': '<span style="font-size:14px;" class="label label-primary ">'+newPlane.name+'</span><span class="cancel-img"><image id="cancel" src="images/cancel.png"></span>', 
@@ -241,7 +231,7 @@
         					});
         				} else if(plane.status == "Landing") {
         					self.stopUpdatingRadarScreen();
-        					self.land(planeImg, newPlane, newPlane.gateStr);
+        					self.land(planeImg, newPlane, newPlane.gate.name);
         				} else if(plane.status == "Landed") {
         					
         				}
@@ -277,15 +267,10 @@
 			this.interval = null;
     	},
    
-    	land: function(element, plane, selectedGate) {
-    		if(selectedGate != "") {
-    			plane.gateStr = selectedGate;
-        		plane.gate = getGate(selectedGate);
-    		} else {
-    			selectedGate = plane.gateStr;
-    		}
+    	land: function(element, plane, gate) {
+    		    		
     		// update status
-    		this.changeStatus(plane, "11", selectedGate, 'Landing'); // -> Landing
+    		this.changeStatus(plane, 'Landing'); // -> Landing
     		
     		// draw animation
     		var self = this;
@@ -306,15 +291,14 @@
 						left : 450 + addX + 'px',
 						top : (height-172) - addY +  'px'
 					}, 4500, function() {
-			    		self.changeStatus(plane, "21", plane.gateStr, 'Landed'); // -> Landed
+			    		//self.changeStatus(plane, 'Landed'); // -> Landed
 						setTimeout(function() {
-							var gate = plane.gate;
 							animationElement.animate({
 								left : gate.left + addX + 'px', //500 + addX + 'px',
 								top : (gate.top + addY) + "px" //(height-150) - addY +  'px'
 							}, 3500, function() {
 								setTimeout(function() {
-						    		self.changeStatus(plane, "31", plane.gateStr, 'Closed'); // -> Dock and Close
+						    		//self.changeStatus(plane, "31", gate, 'Closed'); // -> Dock and Close
 									self.planes[plane.name] = null;
 									delete self.planes[plane.name];
 									animationElement.remove();
@@ -329,14 +313,16 @@
 			});
     	},
     	
-    	changeStatus: function(plane, transition, gate, statusName) {
+    	changeStatus: function(plane, statusName) {
+    		data = {"key": plane.key, "status": statusName};
+    		console.log(data);
     		// update status
     		$.ajax({
     			type: "POST",
-    			contentType: "application/json; charset=utf-8",
-    			url: "http://192.168.180.41:6789/innovasion/api/plane/change",     
+    			contentType: "application/x-www-form-urlencoded",
+    			url: "http://localhost:8888/api/plane",     
     			async: true,
-    			data: '{"key":"' + plane.key + '", "transition" : "' + transition +'", "gate": "' + gate + '"}',
+    			data: JSON.stringify(data),
     			success: function(resp) {
        				plane.status = statusName;
     			},
@@ -369,20 +355,17 @@
     	}
     };
     
-	$.Plane = function(id, key, name, type, priority, gate, gateStr, coordinates, status, destination, heading, lastUpdated) {
+	$.Plane = function(id, key, name, type, priority, coordinates, status, destination, heading) {
 		this.id = id;
 		this.key = key;
 		this.name = name; 
 		this.priority = priority;
-		this.gateStr = gateStr;
-		this.gate = gate;
 		this.type = type;
 		this.left = coordinates.split(":")[0]; 
 		this.top = coordinates.split(":")[1]; 
 		this.status = status; 
 		this.destination = destination;
 		this.heading = heading;
-		this.lastUpdated = lastUpdated;
 	};
 
 }(jQuery));
@@ -410,24 +393,8 @@ var width = 650 + offsetX;
 var height = 650 + offsetY;
 
 var busyGates = [];
-function getGate(gateStr) {
-	var gate = {};
-	switch(gateStr) {
-		case "B2":
-			gate = {"left":370, "top":540};
-			break;
-		case "B3":
-			gate = {"left":228, "top":545};
-			break;
-		case "A1":
-			gate = {"left":135, "top":530};
-			break;
-		case "B1":
-			gate = {"left":558, "top":513};
-			break;
-		default:
-			gate = {"left":370, "top":540};
-	}
-	return gate;
+function getGate(gateObj) {
+	return {'name':gateObj.name, "left":parseInt(gateObj.coordinates.split("x")[0]), "top":parseInt(gateObj.coordinates.split("x")[1])};
 }
+
 
