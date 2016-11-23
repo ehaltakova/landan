@@ -47,7 +47,7 @@ var gates = {};
         				var name = issue.name;
         				var type = issue.type;
         				var position = issue.position;
-        				var status = issue.status.name
+        				var status = issue.status.name;
         				var destination = issue.destination;
         				var heading = issue.heading;
         				var priority = issue.priority;
@@ -320,7 +320,7 @@ var gates = {};
     		$.ajax({
     			type: "POST",
     			contentType: "application/x-www-form-urlencoded",
-    			url: "http://localhost:8888/api/plane",     
+    			url: "http://localhost:8888/api/plane/change",     
     			async: true,
     			data: JSON.stringify(data),
     			success: function(resp) {
